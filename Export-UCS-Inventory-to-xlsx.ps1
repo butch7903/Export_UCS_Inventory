@@ -2,7 +2,7 @@
     .NOTES
 	===========================================================================
 	Created by:		Russell Hamker
-	Date:			July 29, 2021
+	Date:			July 30, 2021
 	Version:		1.0
 	Twitter:		@butch7903
 	GitHub:			https://github.com/butch7903
@@ -144,7 +144,7 @@ Write-Host (Get-Date -format "MMM-dd-yyyy_HH-mm-ss")
 Write-Host "-----------------------------------------------------------------------------------------------------------------------"
 
 ##Create Secure AES Keys for User and Password Management
-$KeyFile = $pwd.path+"\"+"AES.key"
+$KeyFile = $pwd.path+"\"+"UCSAES.key"
 If (Test-Path $KeyFile){
 	Write-Host "AES File Exists"
 	$Key = Get-Content $KeyFile
@@ -186,6 +186,7 @@ function GenerateReport()
 				[Parameter(Mandatory=$true)][System.Management.Automation.PSCredential]$UCSCredentials)
 
 	# Connect to the UCS
+	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 #Added for proxy requirement. may need to comment this out to disable if not using TLS1.2
 	$ucsc = Connect-Ucs -Name $UCSM -Credential $UCSCredentials
 
 	# Test connection
